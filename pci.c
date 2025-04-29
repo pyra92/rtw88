@@ -1509,6 +1509,10 @@ static void rtw_pci_phy_cfg(struct rtw_dev *rtwdev)
 
 static int __maybe_unused rtw_pci_suspend(struct device *dev)
 {
+#ifdef CONFIG_RTW88_DISABLE_AUTOSUSPEND
+	return 0;
+#endif
+
 	struct ieee80211_hw *hw = dev_get_drvdata(dev);
 	struct rtw_dev *rtwdev = hw->priv;
 	const struct rtw_chip_info *chip = rtwdev->chip;

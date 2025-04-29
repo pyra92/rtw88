@@ -1091,6 +1091,10 @@ static void rtw_sdio_handle_interrupt(struct sdio_func *sdio_func)
 
 static int __maybe_unused rtw_sdio_suspend(struct device *dev)
 {
+#ifdef CONFIG_RTW88_DISABLE_AUTOSUSPEND
+	return 0;
+#endif
+
 	struct sdio_func *func = dev_to_sdio_func(dev);
 	struct ieee80211_hw *hw = dev_get_drvdata(dev);
 	struct rtw_dev *rtwdev = hw->priv;

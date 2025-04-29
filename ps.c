@@ -26,6 +26,10 @@ static int rtw_ips_pwr_up(struct rtw_dev *rtwdev)
 
 int rtw_enter_ips(struct rtw_dev *rtwdev)
 {
+#ifdef CONFIG_RTW88_PS_DISABLE
+	return 0;
+#endif
+
 	if (!test_bit(RTW_FLAG_POWERON, rtwdev->flags))
 		return 0;
 
@@ -68,6 +72,11 @@ int rtw_leave_ips(struct rtw_dev *rtwdev)
 
 void rtw_power_mode_change(struct rtw_dev *rtwdev, bool enter)
 {
+#ifdef CONFIG_RTW88_PS_DISABLE
+	if (enter)
+		return;
+#endif
+
 	u8 request, confirm, polling;
 	int ret;
 
@@ -277,6 +286,10 @@ static void __rtw_leave_lps(struct rtw_dev *rtwdev)
 void rtw_enter_lps(struct rtw_dev *rtwdev, u8 port_id)
 {
 	lockdep_assert_held(&rtwdev->mutex);
+
+#ifdef CONFIG_RTW88_PS_DISABLE
+	return;
+#endif
 
 	if (rtwdev->coex.stat.wl_force_lps_ctrl)
 		return;
